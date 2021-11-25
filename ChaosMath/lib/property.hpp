@@ -26,10 +26,10 @@ public:
 };
 
 template <typename T>
-class ReadOnlyProperty {
+class ReadOnlyProperty { // this class is no longer necessary haha
 public:
-    virtual ~ReadOnlyProperty() {}
-    virtual operator T const & () const { return value; }
+    //virtual ~ReadOnlyProperty() {}
+    //virtual operator T const & () const { return *value; }
 protected:
-    T value;
+    //T *value;
 };

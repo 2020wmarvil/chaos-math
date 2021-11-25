@@ -142,10 +142,25 @@ struct vec2 {
 
         void SetVec(vec2<T>* vec) { _vec = vec; }
 
-        virtual operator float const & () const {
-            return std::sqrt(_vec->x* _vec->x + _vec->y* _vec->y); 
+        // really weird memory issues here if we try and access _vec->x or _vec->y more than once
+        virtual operator T () const { 
+            T x = _vec->x; T y = _vec->y;
+            return (T)std::sqrt(x*x + y*y); 
         }
     } magnitude;
+
+    class : public ReadOnlyProperty<vec2<T>> { 
+    public:
+        vec2<T>* _vec;
+
+        void SetVec(vec2<T>* vec) { _vec = vec; }
+
+        virtual operator vec2<T> () const {
+            T x = _vec->x; T y = _vec->y;
+            T mag = std::sqrt(x*x + y*y); 
+            return vec2<T>(x, y) / mag;
+        }
+    } normalized;
     #pragma endregion
 
     vec2() : vec2(0, 0) { }
@@ -153,6 +168,7 @@ struct vec2 {
     vec2(T a, T b) {
         x = a; y = b;
         magnitude.SetVec(this);
+        normalized.SetVec(this);
     }
 
     #pragma region OPERATOR OVERLOADS
@@ -188,12 +204,20 @@ struct vec2 {
       left *= right;
       return left;
     }
+    friend vec2 operator*(vec2 left, const T& right) {
+      left *= right;
+      return left;
+    }
     vec2& operator/=(const vec2& right) {
       x /= right.x;
       y /= right.y;
       return *this;
     }
     friend vec2 operator/(vec2 left, const vec2& right) {
+      left /= right;
+      return left;
+    }
+    friend vec2 operator/(vec2 left, const T& right) {
       left /= right;
       return left;
     }
