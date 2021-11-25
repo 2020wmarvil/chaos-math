@@ -228,9 +228,25 @@ struct vec2 {
 };
 #pragma endregion
 
+
+    template<typename T>
+    inline bool operator==(const vec2<T>& lhs, const vec2<T>& rhs) {
+        return lhs.x == rhs.x && lhs.y == rhs.y;
+    }
+    template<typename T>
+    inline bool operator!=(const vec2<T>& lhs, const vec2<T>& rhs) {
+        return !operator==(lhs,rhs);
+    }
+
+    template<typename vec_type, typename T, unsigned int A, unsigned int B, unsigned int C, unsigned int D>
+    inline bool operator==(const vec2_swizzle<vec_type, T, A, B>& lhs, const vec2_swizzle<vec_type, T, C, D>& rhs) {
+        return lhs.d[0] == rhs.d[0] && lhs.d[1] == rhs.d[1];
+    }
+
 #pragma region PRINT OVERLOADS
 #define DEFINE_PRINT_FUNCS(X) \
-inline std::ostream& operator<<(std::ostream &os, X<float>      vec) { os << "(" << vec.x << ", " << vec.y << ")"; return os; } \
+template<typename T> \
+inline std::ostream& operator<<(std::ostream &os, X<T>      vec) { os << "(" << vec.x << ", " << vec.y << ")"; return os; } \
 inline std::ostream& operator<<(std::ostream &os, X<double>     vec) { os << "(" << vec.x << ", " << vec.y << ")"; return os; } \
 inline std::ostream& operator<<(std::ostream &os, X<uint8_t>	vec) { os << "(" << vec.x << ", " << vec.y << ")"; return os; } \
 inline std::ostream& operator<<(std::ostream &os, X<int8_t>		vec) { os << "(" << vec.x << ", " << vec.y << ")"; return os; } \
