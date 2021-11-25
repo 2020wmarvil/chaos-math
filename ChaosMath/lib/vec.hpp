@@ -11,6 +11,8 @@ namespace cm {
 template<typename T, unsigned int I>
 struct scalar_swizzle {
     T v[1];
+
+    #pragma region SCALAR OVERLOADS
     T &operator=(const T x) {
         v[I] = x;
         return v[I];
@@ -40,11 +42,54 @@ struct scalar_swizzle {
       v[I] += right;
       return *this;
     }
-
+    scalar_swizzle& operator+=(const T& right) {
+      v[I] += right;
+      return *this;
+    }
     friend scalar_swizzle operator+(scalar_swizzle left, const scalar_swizzle& right) {
       left += right;
       return left;
     }
+
+    scalar_swizzle& operator-=(const scalar_swizzle& right) {
+      v[I] -= right;
+      return *this;
+    }
+    scalar_swizzle& operator-=(const T& right) {
+      v[I] -= right;
+      return *this;
+    }
+    friend scalar_swizzle operator-(scalar_swizzle left, const scalar_swizzle& right) {
+      left -= right;
+      return left;
+    }
+
+    scalar_swizzle& operator*=(const scalar_swizzle& right) {
+      v[I] *= right;
+      return *this;
+    }
+    scalar_swizzle& operator*=(const T& right) {
+      v[I] *= right;
+      return *this;
+    }
+    friend scalar_swizzle operator*(scalar_swizzle left, const scalar_swizzle& right) {
+      left *= right;
+      return left;
+    }
+
+    scalar_swizzle& operator/=(const scalar_swizzle& right) {
+      v[I] /= right;
+      return *this;
+    }
+    scalar_swizzle& operator/=(const T& right) {
+      v[I] /= right;
+      return *this;
+    }
+    friend scalar_swizzle operator/(scalar_swizzle left, const scalar_swizzle& right) {
+      left /= right;
+      return left;
+    }
+    #pragma endregion
 };
 
 // we use a vec_type in a template instead of forward declartions to prevent errors in some compilers.
